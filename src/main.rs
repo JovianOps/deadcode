@@ -5,7 +5,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 
-const EXTS: &str = "js ts tsx jsx mjs cjs py pyw rs go java kt kts swift c cpp cc cxx h hpp hxx cs vb vbs rb rpy php pl pm lua nim zig dart scala groovy clj cljs cljc ex exs erl hrl hs lhs ml mli fs fsi fsx jl r R cr c3 odin v pas pp sql graphql gql proto thrift toml yaml yml json md mdx sh bash zsh fish ps1 bat cmd tf tfvars hcl vue svelte astro elm purs pure res resi gleam tofu pkl tcl awk sed asm s m mm rst adoc tex sty cls bib";
+const EXTS: &str = "js ts tsx jsx mjs cjs py pyw rs go java kt kts swift c cpp cc cxx h hpp hxx cs vb vbs rb rpy php pl pm lua nim zig dart scala groovy clj cljs cljc ex exs erl hrl hs lhs ml mli fs fsi fsx jl r R cr c3 odin v pas pp sql graphql gql proto thrift toml yaml yml json md mdx sh bash zsh fish ps1 bat cmd tf tfvars hcl vue svelte astro elm purs pure res resi gleam tofu pkl tcl awk sed asm s m mm rst adoc tex sty cls bib elixir exs eex crm diff patch psv ini cfg conf properties properties yml yaml ini diff patch log trace gitignore dockerfile containerfile gem gemspec lock lockfile nix lock lockfile toml ini cfg conf env dotfile";
 
 fn is_source(p: &Path) -> bool {
     let ext = p.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
