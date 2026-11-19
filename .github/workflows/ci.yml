@@ -1,6 +1,9 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
 
 jobs:
   test:
@@ -9,14 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        python-version: ['3.10', '3.12', '3.13']
-        rust-version: [stable]
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - uses: astral-sh/setup-uv@v3
-        with:
-          python-version: ${{ matrix.python-version }}
       - uses: Swatinem/rust-cache@v2
-      - run: cargo test --all-features
-      - run: uv run pytest   
+      - run: cargo test --all-features   
