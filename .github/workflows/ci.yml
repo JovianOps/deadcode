@@ -7,9 +7,8 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest macos-latest windows-latest
     steps:
-      - uses: actions/checkout@stable
+      - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@stable
       - run: cargo test   
