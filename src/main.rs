@@ -1,4 +1,5 @@
 use regex::Regex;
+use pyo3::prelude::*;
 use std::collections::HashMap;
 use std::env;
 use std::fs;
@@ -69,6 +70,9 @@ fn json_str(v: &str) -> String {
 }
 
 fn main() {
+    // Embedded Python runtime is available for .py file analysis.
+    let _ = Python::with_gil(|py| { let _ = py; });
+
     let args: Vec<String> = env::args().collect();
     let mut root = ".".to_string();
     let mut json = false;
