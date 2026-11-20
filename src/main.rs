@@ -71,7 +71,7 @@ fn json_str(v: &str) -> String {
 
 fn main() {
     // Embedded Python runtime is available for .py file analysis.
-    let _ = Python::with_gil(|py| { let _ = py; });
+        let _ = Python::try_attach(|py| { let _ = py; });
 
     let args: Vec<String> = env::args().collect();
     let mut root = ".".to_string();
