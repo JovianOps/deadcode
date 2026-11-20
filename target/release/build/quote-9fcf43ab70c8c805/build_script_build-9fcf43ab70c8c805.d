@@ -1,5 +1,0 @@
-C:\Users\RDC\Desktop\deadcode\target\release\build\quote-9fcf43ab70c8c805\build_script_build-9fcf43ab70c8c805.d: C:\Users\RDC\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.47\build.rs
-
-C:\Users\RDC\Desktop\deadcode\target\release\build\quote-9fcf43ab70c8c805\build_script_build-9fcf43ab70c8c805.exe: C:\Users\RDC\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.47\build.rs
-
-C:\Users\RDC\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\quote-1.0.47\build.rs:

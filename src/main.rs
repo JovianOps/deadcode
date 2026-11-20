@@ -1,5 +1,5 @@
-use regex::Regex;
 use pyo3::prelude::*;
+use regex::Regex;
 use std::collections::HashMap;
 use std::env;
 use std::fs;
@@ -9,7 +9,11 @@ use walkdir::WalkDir;
 const EXTS: &str = "js ts tsx jsx mjs cjs py pyw rs go java kt kts swift c cpp cc cxx h hpp hxx cs vb vbs rb rpy php pl pm lua nim zig dart scala groovy clj cljs cljc ex exs erl hrl hs lhs ml mli fs fsi fsx jl r R cr c3 odin v pas pp sql graphql gql proto thrift toml yaml yml json md mdx sh bash zsh fish ps1 bat cmd tf tfvars hcl vue svelte astro elm purs pure res resi gleam tofu pkl tcl awk sed asm s m mm rst adoc tex sty cls bib elixir exs eex crm diff patch psv ini cfg conf properties properties yml yaml ini diff patch log trace gitignore dockerfile containerfile gem gemspec lock lockfile nix lock lockfile toml ini cfg conf env dotfile";
 
 fn is_source(p: &Path) -> bool {
-    let ext = p.extension().and_then(|e| e.to_str()).unwrap_or("").to_lowercase();
+    let ext = p
+        .extension()
+        .and_then(|e| e.to_str())
+        .unwrap_or("")
+        .to_lowercase();
     EXTS.split_whitespace().any(|e| e == ext)
 }
 
@@ -18,8 +22,16 @@ fn is_excluded(p: &Path) -> bool {
         let s = c.as_os_str().to_string_lossy();
         matches!(
             s.as_ref(),
-            "node_modules" | "target" | ".git" | "dist" | "build" | "__pycache__"
-                | "vendor" | ".venv" | "venv" | "deps"
+            "node_modules"
+                | "target"
+                | ".git"
+                | "dist"
+                | "build"
+                | "__pycache__"
+                | "vendor"
+                | ".venv"
+                | "venv"
+                | "deps"
         )
     })
 }
@@ -28,9 +40,15 @@ fn strip_comments(code: &str) -> String {
     code.lines()
         .map(|l| {
             let mut cut = l.len();
-            if let Some(i) = l.find("//") { cut = cut.min(i); }
-            if let Some(i) = l.find('#') { cut = cut.min(i); }
-            if let Some(i) = l.find("--") { cut = cut.min(i); }
+            if let Some(i) = l.find("//") {
+                cut = cut.min(i);
+            }
+            if let Some(i) = l.find('#') {
+                cut = cut.min(i);
+            }
+            if let Some(i) = l.find("--") {
+                cut = cut.min(i);
+            }
             format!("{}{}", &l[..cut], " ".repeat(l.len().saturating_sub(cut)))
         })
         .collect::<Vec<_>>()
@@ -44,7 +62,11 @@ fn symbols_of(content: &str) -> Vec<(usize, String)> {
     ).unwrap();
     for (i, line) in content.lines().enumerate() {
         for c in re.captures_iter(line) {
-            let name = c.get(1).or_else(|| c.get(2)).map(|m| m.as_str()).unwrap_or("");
+            let name = c
+                .get(1)
+                .or_else(|| c.get(2))
+                .map(|m| m.as_str())
+                .unwrap_or("");
             if name.len() > 1 && name != "default" {
                 out.push((i + 1, name.to_string()));
             }
@@ -71,7 +93,9 @@ fn json_str(v: &str) -> String {
 
 fn main() {
     // Embedded Python runtime is available for .py file analysis.
-        let _ = Python::try_attach(|py| { let _ = py; });
+    let _ = Python::try_attach(|py| {
+        let _ = py;
+    });
 
     let args: Vec<String> = env::args().collect();
     let mut root = ".".to_string();
@@ -92,7 +116,9 @@ fn main() {
             "-h" | "--help" => {
                 println!("deadcode - fast cross-language dead-code detector\n");
                 println!("Usage: deadcode [PATH] [--json] [--exclude PATTERN]");
-                println!("\nDetects exported/public symbols never referenced elsewhere in the repo.");
+                println!(
+                    "\nDetects exported/public symbols never referenced elsewhere in the repo."
+                );
                 println!("Supports 100+ languages by file extension.");
                 println!("\nExit codes: 0 ok, 1 invalid arguments, 2 path not found");
                 return;
@@ -119,7 +145,10 @@ fn main() {
         if !p.is_file() || !is_source(p) || is_excluded(p) {
             continue;
         }
-        if excludes.iter().any(|ex| p.to_string_lossy().contains(ex.as_str())) {
+        if excludes
+            .iter()
+            .any(|ex| p.to_string_lossy().contains(ex.as_str()))
+        {
             continue;
         }
         if let Ok(raw) = fs::read_to_string(p) {
@@ -139,7 +168,9 @@ fn main() {
             for (p2, c2) in &files {
                 if p2 == p {
                     for (i2, line) in c2.lines().enumerate() {
-                        if i2 + 1 == ln { continue; }
+                        if i2 + 1 == ln {
+                            continue;
+                        }
                         count += line.matches(sym.as_str()).count();
                     }
                 } else {
@@ -174,7 +205,11 @@ fn main() {
         for (p, ln, sym) in &dead {
             println!("DEAD  {}:{}  {}", p.display(), ln, sym);
         }
-        println!("\n{} dead symbol(s) found across {} files.", dead.len(), files.len());
+        println!(
+            "\n{} dead symbol(s) found across {} files.",
+            dead.len(),
+            files.len()
+        );
     }
 }
 
